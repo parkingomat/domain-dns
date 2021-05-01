@@ -8,17 +8,17 @@ try {
 
         $domain_list = let_json("domain_list.json");
 
-        $domains_per_host = [];
+        $nameserver_list = [];
         foreach ($domain_list as $obj) {
             $list = $obj;
             foreach ($list as $item) {
                 $result = dns_get_record($item);
-                $domains_per_host['nameserver_list'][$item] = $result;
+                $nameserver_list['nameserver_list'][$item] = $result;
             }
         }
 
         header('Content-Type: application/json');
-        def_json('nameserver_list.json', $domains_per_host, function ($data) {
+        def_json('nameserver_list.json', $nameserver_list, function ($data) {
             echo $data;
             exit();
         });
