@@ -1,6 +1,6 @@
 <?php
 
-require("../load_func.php");
+require("load_func.php");
 
 try {
 
