@@ -12,6 +12,11 @@ try {
         foreach ($domain_list as $obj) {
             $list = $obj;
             foreach ($list as $item) {
+
+//                https://www.php.net/manual/en/function.dns-get-record.php
+//                DNS_ALL - DNS_PTR);
+                //        $dnsr = dns_get_record('php.net', DNS_A + DNS_NS);
+
                 $result = dns_get_record($item);
                 $nameserver_list['nameserver_list'][$item] = $result;
             }
