@@ -1,5 +1,6 @@
 # domain-dns.parkingomat.pl
-Check DNS for domain list
+
+[Check DNS for domain list](https://domain-dns.parkingomat.pl/)
 
 ## github
 
