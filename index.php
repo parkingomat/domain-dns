@@ -35,13 +35,6 @@ try {
                         if ($record->type !== 'NS') return null;
 
                         return $record->target;
-//                return [
-//                    [$record->host => $record->target]
-//                    'domain' => $record->host,
-//                    'class' => $obj->class,
-//                    'target' => $obj->target
-//                    'nameserver' => $record->target
-//                ];
                     });
 //            var_dump("data_filtered2",$data_filtered2);
 
