@@ -4,8 +4,11 @@
 
 + [GET request](https://domain-dns.parkingomat.pl/index.php)
 
-https://domain-dns.parkingomat.pl/index.php
 
 ## github
 
     https://github.com/parkingomat/domain-dns.git
+
+
+@# project URL
+https://domain-dns.parkingomat.pl/index.php

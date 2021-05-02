@@ -2,12 +2,15 @@
 
 require("load_func.php");
 
+header('Content-Type: application/json');
+
+# Webs service with JSON
 try {
 
     load_func([
         'https://php.letjson.com/let_json.php',
         'https://php.defjson.com/def_json.php',
-        'https://php.each_func.com/each_func.php',
+        'https://php.eachfunc.com/each_func.php',
 
     ], function () {
 
@@ -47,12 +50,14 @@ try {
             }
         }
 
-        header('Content-Type: application/json');
         echo def_json($meta->out->file, $nameserver_list);
 
     });
 
-} catch (exception $e) {
-    // Set HTTP response status code to: 500 - Internal Server Error
-    http_response_code(500);
+} catch (Exception $e) {
+    echo def_json('', ['error' => $e->getMessage()]);
 }
+# Set HTTP response status code to: 500 - Internal Server Error
+//http_response_code(500);
+
+?>
