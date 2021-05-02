@@ -18,46 +18,29 @@ try {
 
         $domain_list = let_json($meta->in->file);
 
-        $nameserver_list = [];
-        foreach ($domain_list as $obj) {
-            $list = $obj;
-            foreach ($list as $item) {
+        $domain_nameserver_list = each_func($domain_list->domain_list, function ($domain) {
 
 //                https://www.php.net/manual/en/function.dns-get-record.php
 //                DNS_ALL - DNS_PTR);
-                //        $dnsr = dns_get_record('php.net', DNS_A + DNS_NS);
+            //        $dnsr = dns_get_record('php.net', DNS_A + DNS_NS);
+            $records = dns_get_record($domain);
+            $nameserver_list[$domain] = each_func($records, function ($record) {
+                if (empty($record)) return null;
 
-                $result = dns_get_record($item);
+                if ($record["type"] !== 'NS') return null;
 
-                $nameserver_list = each_func((array)$result, function ($item) {
+                return $record["target"];
+            });
 
-                    $data_filtered2 = each_func($item, function ($record) {
-//                var_dump($record);
-                        if (empty($record)) return null;
+            if (empty($nameserver_list)) return null;
 
-                        if ($record->type !== 'NS') return null;
+            return $nameserver_list;
+        });
 
-                        return $record->target;
-                    });
-//            var_dump("data_filtered2",$data_filtered2);
-
-                    if (empty($data_filtered2)) return null;
-
-                    return $data_filtered2;
-                });
-
-//                $nameserver_list['domain_nameserver_list'][$item] = $result;
-            }
-        }
-
-        echo def_json($meta->out->file, $nameserver_list);
+        echo def_json($meta->in->file, ['domain_list.json' => $domain_nameserver_list]);
 
     });
 
 } catch (Exception $e) {
     echo def_json('', ['error' => $e->getMessage()]);
 }
-# Set HTTP response status code to: 500 - Internal Server Error
-//http_response_code(500);
-
-?>
