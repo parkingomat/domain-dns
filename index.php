@@ -4,9 +4,14 @@ require("load_func.php");
 
 try {
 
-    load_func(['https://php.letjson.com/let_json.php', 'https://php.defjson.com/def_json.php'], function () {
+    load_func([
+        'https://php.letjson.com/let_json.php',
+        'https://php.defjson.com/def_json.php'
+    ], function () {
 
-        $domain_list = let_json("domain_list.json");
+        $meta = let_json("meta.json");
+
+        $domain_list = let_json($meta->in->file);
 
         $nameserver_list = [];
         foreach ($domain_list as $obj) {
@@ -18,12 +23,12 @@ try {
                 //        $dnsr = dns_get_record('php.net', DNS_A + DNS_NS);
 
                 $result = dns_get_record($item);
-                $nameserver_list['nameserver_list'][$item] = $result;
+                $nameserver_list['domain_nameserver_list'][$item] = $result;
             }
         }
 
         header('Content-Type: application/json');
-        def_json('nameserver_list.json', $nameserver_list, function ($data) {
+        def_json($meta->out->file, $nameserver_list, function ($data) {
             echo $data;
             exit();
         });
