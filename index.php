@@ -6,7 +6,9 @@ try {
 
     load_func([
         'https://php.letjson.com/let_json.php',
-        'https://php.defjson.com/def_json.php'
+        'https://php.defjson.com/def_json.php',
+        'https://php.each_func.com/each_func.php',
+
     ], function () {
 
         $meta = let_json("meta.json");
@@ -23,15 +25,37 @@ try {
                 //        $dnsr = dns_get_record('php.net', DNS_A + DNS_NS);
 
                 $result = dns_get_record($item);
-                $nameserver_list['domain_nameserver_list'][$item] = $result;
+
+                $nameserver_list = each_func((array)$result, function ($item) {
+
+                    $data_filtered2 = each_func($item, function ($record) {
+//                var_dump($record);
+                        if (empty($record)) return null;
+
+                        if ($record->type !== 'NS') return null;
+
+                        return $record->target;
+//                return [
+//                    [$record->host => $record->target]
+//                    'domain' => $record->host,
+//                    'class' => $obj->class,
+//                    'target' => $obj->target
+//                    'nameserver' => $record->target
+//                ];
+                    });
+//            var_dump("data_filtered2",$data_filtered2);
+
+                    if (empty($data_filtered2)) return null;
+
+                    return $data_filtered2;
+                });
+
+//                $nameserver_list['domain_nameserver_list'][$item] = $result;
             }
         }
 
         header('Content-Type: application/json');
-        def_json($meta->out->file, $nameserver_list, function ($data) {
-            echo $data;
-            exit();
-        });
+        echo def_json($meta->out->file, $nameserver_list);
 
     });
 
