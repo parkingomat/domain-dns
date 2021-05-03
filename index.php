@@ -4,7 +4,7 @@ require("load_func.php");
 
 header('Content-Type: application/json');
 
-# Webs service with JSON
+# Webs service with JSON to show/write list of nameservice many domains in: domain_list.json
 try {
 
     load_func([
@@ -15,8 +15,11 @@ try {
     ], function () {
 
         $meta = let_json("meta.json");
-
         $domain_list = let_json($meta->in->file);
+
+        if (empty($domain_list)) {
+            throw new Exception("JSON file is empty or has error inside");
+        }
 
         $domain_nameserver_list = each_func($domain_list->domain_list, function ($domain) {
 
@@ -25,6 +28,7 @@ try {
             //        $dnsr = dns_get_record('php.net', DNS_A + DNS_NS);
             $records = dns_get_record($domain);
             $nameserver_list[$domain] = each_func($records, function ($record) {
+
                 if (empty($record)) return null;
 
                 if ($record["type"] !== 'NS') return null;
@@ -37,7 +41,7 @@ try {
             return $nameserver_list;
         });
 
-        echo def_json($meta->in->file, ['domain_list.json' => $domain_nameserver_list]);
+        echo def_json($meta->out->file, ['domain_list' => $domain_nameserver_list]);
 
     });
 
