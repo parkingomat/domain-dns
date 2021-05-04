@@ -2,6 +2,12 @@
 
 require("load_func.php");
 
+/*
+https://www.php.net/manual/en/function.dns-get-record.php
+$dnsr = dns_get_record('php.net', DNS_A + DNS_NS);
+$dnsr = dns_get_record('php.net', DNS_ALL - DNS_PTR);
+*/
+
 header('Content-Type: application/json');
 
 # Webs service with JSON to show/write list of nameservice many domains in: domain_list.json
@@ -23,10 +29,8 @@ try {
 
         $domain_nameserver_list = each_func($domain_list->domain_list, function ($domain) {
 
-//                https://www.php.net/manual/en/function.dns-get-record.php
-//                DNS_ALL - DNS_PTR);
-            //        $dnsr = dns_get_record('php.net', DNS_A + DNS_NS);
-            $records = dns_get_record($domain);
+            $records = dns_get_record($domain, DNS_NS);
+
             $nameserver_list[$domain] = each_func($records, function ($record) {
 
                 if (empty($record)) return null;
